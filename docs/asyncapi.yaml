@@ -1,37 +1,23 @@
 asyncapi: 2.6.0
-id: urn:com:example:chat-ws
+id: urn:example:chat-ws
 defaultContentType: application/json
 info:
   title: Chat Backend WebSocket API
   version: 0.1.0
-  description: |
-    /ws に接続して JSON メッセージを送受信します。
-    クライアント→サーバー（publish）、サーバー→クライアント（subscribe）。
-tags:
-  - name: chat
-    description: チャット
 
 servers:
   prod:
-    url: ws://<host>
-    protocol: ws
-    description: 本番環境
+    url: wss://<host>
+    protocol: wss
 
 channels:
   /ws:
-    description: WebSocket チャネル（単一エンドポイント）
     subscribe:
       operationId: receiveMessage
-      tags:
-        - name: chat
-      summary: サーバー→クライアントのブロードキャスト
       message:
         $ref: '#/components/messages/ChatMessageOut'
     publish:
       operationId: sendMessage
-      tags:
-        - name: chat
-      summary: クライアント→サーバーへの送信
       message:
         $ref: '#/components/messages/ChatMessageIn'
 
@@ -41,29 +27,23 @@ components:
       x-parser-schema-id: ChatPayload
       type: object
       properties:
-        username:
-          type: string
-          description: 投稿者
-        content:
-          type: string
-          description: 本文
-      required:
-        - username
-        - content
-  
+        username: { type: string, description: 投稿者 }
+        content:  { type: string, description: 本文 }
+      required: [username, content]
+
   messages:
-    ChatMessageOut:
-      name: ChatMessageOut
-      title: サーバーからクライアントへのメッセージ
-      summary: チャットメッセージのブロードキャスト
-      contentType: application/json
-      payload:
-        $ref: '#/components/schemas/ChatPayload'
-    
     ChatMessageIn:
-      name: ChatMessageIn
-      title: クライアントからサーバーへのメッセージ
-      summary: チャットメッセージの送信
-      contentType: application/json
-      payload:
-        $ref: '#/components/schemas/ChatPayload'
+      name: MessageIn
+      summary: クライアント→サーバー
+      payload: { $ref: '#/components/schemas/ChatPayload' }
+      examples:
+        - name: send
+          payload: { username: "Alice", content: "Hello!" }
+
+    ChatMessageOut:
+      name: MessageOut
+      summary: サーバー→クライアント（ブロードキャスト）
+      payload: { $ref: '#/components/schemas/ChatPayload' }
+      examples:
+        - name: receive
+          payload: { username: "Bob", content: "Hi!" }
