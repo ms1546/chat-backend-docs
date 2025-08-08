@@ -1,45 +1,69 @@
 asyncapi: 2.6.0
+id: urn:com:example:chat-ws
+defaultContentType: application/json
 info:
   title: Chat Backend WebSocket API
   version: 0.1.0
   description: |
     /ws に接続して JSON メッセージを送受信します。
-    クライアント→サーバー（publish）、サーバー→クライアント（subscribe）で同一ペイロードを利用。
+    クライアント→サーバー（publish）、サーバー→クライアント（subscribe）。
+tags:
+  - name: chat
+    description: チャット
 
 servers:
   prod:
-    url: wss://<host>
-    protocol: wss
-    description: 本番）
+    url: ws://<host>
+    protocol: ws
+    description: 本番環境
 
 channels:
   /ws:
     description: WebSocket チャネル（単一エンドポイント）
     subscribe:
-      summary: ブロードキャストを受信
+      operationId: receiveMessage
+      tags:
+        - name: chat
+      summary: サーバー→クライアントのブロードキャスト
       message:
-        $ref: '#/components/messages/Message'
+        $ref: '#/components/messages/ChatMessageOut'
     publish:
-      summary: チャットメッセージを送信
+      operationId: sendMessage
+      tags:
+        - name: chat
+      summary: クライアント→サーバーへの送信
       message:
-        $ref: '#/components/messages/Message'
+        $ref: '#/components/messages/ChatMessageIn'
 
 components:
+  schemas:
+    ChatPayload:
+      x-parser-schema-id: ChatPayload
+      type: object
+      properties:
+        username:
+          type: string
+          description: 投稿者
+        content:
+          type: string
+          description: 本文
+      required:
+        - username
+        - content
+  
   messages:
-    Message:
-      name: Message
-      title: Chat message
+    ChatMessageOut:
+      name: ChatMessageOut
+      title: サーバーからクライアントへのメッセージ
+      summary: チャットメッセージのブロードキャスト
+      contentType: application/json
       payload:
-        type: object
-        properties:
-          username:
-            type: string
-            description: 投稿者
-          content:
-            type: string
-            description: 本文
-        required: [username, content]
-      examples:
-        - payload:
-            username: "Alice"
-            content: "Hello!"
+        $ref: '#/components/schemas/ChatPayload'
+    
+    ChatMessageIn:
+      name: ChatMessageIn
+      title: クライアントからサーバーへのメッセージ
+      summary: チャットメッセージの送信
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/ChatPayload'

@@ -2,7 +2,14 @@
   "private": true,
   "scripts": {
     "build:rest": "npx @redocly/cli@1.19.0 build-docs ./openapi.yaml -o ./index.html",
-    "build:ws": "npx @asyncapi/cli@2.17.0 validate ./asyncapi.yaml && npx @asyncapi/cli@2.17.0 render ./asyncapi.yaml -o ./asyncapi.html -t @asyncapi/html-template --force-write",
+    "build:ws": "npx @asyncapi/generator@2.7.1 ./asyncapi.yaml ./node_modules/@asyncapi/html-template -o ./asyncapi --force-write --param singleFile=true",
     "build": "npm run build:rest && npm run build:ws"
+  },
+  "devDependencies": {
+    "@redocly/cli": "1.19.0",
+    "@asyncapi/generator": "^2.7.1",
+    "@asyncapi/html-template": "^3.3.1",
+    "react": "18",
+    "react-dom": "18"
   }
 }
