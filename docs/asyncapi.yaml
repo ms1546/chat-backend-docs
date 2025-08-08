@@ -7,10 +7,10 @@ info:
     クライアント→サーバー（publish）、サーバー→クライアント（subscribe）で同一ペイロードを利用。
 
 servers:
-  local:
-    url: ...
-    protocol: ws
-    description: aws hosting
+  prod:
+    url: wss://<host>
+    protocol: wss
+    description: 本番）
 
 channels:
   /ws:
