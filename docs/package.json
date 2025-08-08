@@ -1,12 +1,12 @@
 {
   "private": true,
   "devDependencies": {
-    "redoc-cli": "^0.13.21",
+    "@redocly/cli": "^1.19.0",
     "@asyncapi/cli": "^2.17.0"
   },
   "scripts": {
-    "build:rest": "redoc-cli build docs/openapi.yaml -o docs/index.html",
-    "build:ws": "asyncapi generate fromTemplate docs/asyncapi.yaml @asyncapi/html-template -o docs/asyncapi",
+    "build:rest": "redocly build-docs ./openapi.yaml -o ./index.html",
+    "build:ws": "asyncapi generate fromTemplate ./asyncapi.yaml @asyncapi/html-template -o ./asyncapi",
     "build": "npm run build:rest && npm run build:ws"
   }
 }
