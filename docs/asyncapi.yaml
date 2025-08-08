@@ -1,0 +1,44 @@
+asyncapi: 3.0.0
+info:
+  title: Chat Backend WebSocket API
+  version: 0.1.0
+  description: |
+    /ws に接続して JSON メッセージを送受信する。
+    クライアント→サーバー、サーバー→クライアントともに同じペイロード構造（Message）。
+servers:
+  default:
+    protocol: ws
+channels:
+  /ws:
+    address: /ws
+    messages:
+      Message:
+        $ref: "#/components/messages/Message"
+operations:
+  send:
+    action: send
+    channel: { $ref: "#/channels/~1ws" }
+    summary: クライアント→サーバーでメッセージを送信
+    messages:
+      - $ref: "#/channels/~1ws/messages/Message"
+  receive:
+    action: receive
+    channel: { $ref: "#/channels/~1ws" }
+    summary: サーバー→クライアントでブロードキャスト受信
+    messages:
+      - $ref: "#/channels/~1ws/messages/Message"
+components:
+  messages:
+    Message:
+      name: Message
+      title: Chat message
+      payload:
+        type: object
+        properties:
+          username: { type: string }
+          content: { type: string }
+        required: [username, content]
+      examples:
+        - payload:
+            username: "Alice"
+            content: "Hello!"

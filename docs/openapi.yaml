@@ -1,0 +1,54 @@
+openapi: 3.1.0
+info:
+  title: Chat Backend REST API
+  version: 0.1.0
+  description: |
+    直近のメッセージ履歴を返すだけのシンプルなAPI。
+    WebSocketは AsyncAPI (docs/asyncapi.yaml) を参照。
+servers:
+  - url: http://{host}
+paths:
+  /messages:
+    get:
+      summary: Get message history
+      description: |
+        過去に保存されたメッセージを配列で返します。
+        実装上は常に最新100件（サーバ固定）を返します。
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Message"
+              examples:
+                sample:
+                  value:
+                    - username: "Alice"
+                      content: "Hello!"
+                    - username: "Bob"
+                      content: "Hi!"
+        "500":
+          $ref: "#/components/responses/InternalError"
+components:
+  schemas:
+    Message:
+      type: object
+      properties:
+        username:
+          type: string
+        content:
+          type: string
+      required: [username, content]
+  responses:
+    InternalError:
+      description: サーバーエラー
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error: { type: string }
+            required: [error]
