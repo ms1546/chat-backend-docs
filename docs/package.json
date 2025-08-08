@@ -1,12 +1,8 @@
 {
   "private": true,
-  "devDependencies": {
-    "@redocly/cli": "^1.19.0",
-    "rimraf": "^6.0.1"
-  },
   "scripts": {
-    "build:rest": "redocly build-docs ./openapi.yaml -o ./index.html",
-    "build:ws": "npx @asyncapi/cli@2 validate ./asyncapi.yaml && npx @asyncapi/cli@2 render ./asyncapi.yaml -o ./asyncapi.html -t @asyncapi/html-template --force-write",
+    "build:rest": "npx @redocly/cli@1.19.0 build-docs ./openapi.yaml -o ./index.html",
+    "build:ws": "npx @asyncapi/cli@2.17.0 validate ./asyncapi.yaml && npx @asyncapi/cli@2.17.0 render ./asyncapi.yaml -o ./asyncapi.html -t @asyncapi/html-template --force-write",
     "build": "npm run build:rest && npm run build:ws"
   }
 }
