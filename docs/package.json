@@ -6,10 +6,10 @@
     "rimraf": "^6.0.1"
   },
   "scripts": {
+    "versions": "redocly --version && asyncapi --version",
     "check:ws": "asyncapi validate ./asyncapi.yaml",
     "build:rest": "redocly build-docs ./openapi.yaml -o ./index.html",
     "build:ws": "rimraf ./asyncapi && asyncapi render ./asyncapi.yaml -o ./asyncapi -t @asyncapi/html-template --force-write",
-    "build": "npm run check:ws && npm run build:rest && npm run build:ws",
-    "versions": "redocly --version && asyncapi --version"
+    "build": "npm run versions && npm run check:ws && npm run build:rest && npm run build:ws"
   }
 }

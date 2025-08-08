@@ -28,7 +28,10 @@ jobs:
 
       - name: Install deps
         working-directory: ./docs
-        run: npm i
+        run: |
+         srm -f package-lock.json
+          rm -rf node_modules
+          npm i
 
       - name: Build HTML (ReDoc & AsyncAPI)
         run: npm run build
