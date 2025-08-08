@@ -31,8 +31,17 @@ jobs:
         run: npm i
 
       - name: Build HTML (ReDoc & AsyncAPI)
-        run: npm run build
         working-directory: ./docs
+        run: |
+          npm run build
+          touch .nojekyll   # Jekyll無効化（保険）
+
+      - name: List built files
+        working-directory: ./docs
+        run: |
+          ls -la
+          echo "---- asyncapi ----"
+          ls -la asyncapi || true
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
