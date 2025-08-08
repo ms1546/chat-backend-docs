@@ -28,7 +28,7 @@ jobs:
 
       - name: Install deps
         working-directory: ./docs
-        run: npm ci || npm i
+        run: npm i
 
       - name: Build HTML (ReDoc & AsyncAPI)
         run: npm run build
